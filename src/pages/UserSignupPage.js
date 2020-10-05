@@ -1,6 +1,8 @@
 import React from 'react';
+import { withTranslation } from 'react-i18next';
 import {signup} from '../api/apiCalls';
 import Input from "../components/Input";
+import LanguageSelector from '../components/LanguageSelector';
 
 class UserSignupPage extends React.Component {
 
@@ -17,15 +19,17 @@ class UserSignupPage extends React.Component {
     }
 
 
+    //Inputlarda degisiklik oldugu zaman
     onChange = event => {
         const {name, value} = event.target;
         const errors = {...this.state.errors};
+        const { t } = this.props;
 
         if (name === 'password' || name === 'passwordRepeat'){
             if ( name === 'password' && value !== this.state.passwordRepeat){
-               errors.passwordRepeat = 'Passwords mismatch';
+               errors.passwordRepeat = t('Passwords mismatch');
             }else if (name === 'passwordRepeat' && value !==this.state.password){
-                errors.passwordRepeat = 'Passwords mismatch';
+                errors.passwordRepeat = t('Passwords mismatch');
             }else{
                 errors.passwordRepeat = undefined;
             }
@@ -37,56 +41,51 @@ class UserSignupPage extends React.Component {
         })
     }
 
+    //kayit ol butonu tiklandigi zaman
     onClickSignup = async (event) => {
         event.preventDefault();
         const {username, displayName, password} = this.state;
-        const body = {
-            username,
-            displayName,
-            password
-        }
+        const body = {username, displayName, password};
         this.setState({pendingApiCall: true });
-
         try {
             const response = await signup(body);
         }catch (err) {
             if(err.response.data.validationErrors){
-                this.setState({
-                    errors:err.response.data.validationErrors
-                })
-            }
+                this.setState({errors:err.response.data.validationErrors})}
         }
-
         this.setState({pendingApiCall: false});
     }
 
+
+
     render() {
+        const { t } = this.props;
         const { pendingApiCall, errors } = this.state;
         const { username, displayName, password, passwordRepeat } = errors;
         return (
 
             <div className="container">
                 <form>
-                    <h1 className="text-center">Sign Up</h1>
+                    <h1 className="text-center">{t("Sign Up")}</h1>
                     <Input
                         name="username"
-                        label="Username"
+                        label={t("Username")}
                         error={username}
                         onChange={this.onChange}/>
                     <Input
                         name="displayName"
-                        label="Display Name"
+                        label={t("Display Name")}
                         error={displayName}
                         onChange={this.onChange}/>
                     <Input
                         name="password"
-                        label="Password"
+                        label={t("Password")}
                         error={password}
                         onChange={this.onChange}
                         type="password"/>
                     <Input
                         name="passwordRepeat"
-                        label="Password Repeat"
+                        label={t("Password Repeat")}
                         error={passwordRepeat}
                         onChange={this.onChange}
                         type="password"/>
@@ -97,10 +96,10 @@ class UserSignupPage extends React.Component {
                             className="btn btn-primary"
                             onClick={this.onClickSignup}>
                             {pendingApiCall && <span className="spinner-border spinner-border-sm"></span>}
-                            Sign Up
+                            {t("Sign Up")}
                         </button>
                     </div>
-
+                   <LanguageSelector/>
                 </form>
             </div>
 
@@ -108,4 +107,4 @@ class UserSignupPage extends React.Component {
     }
 }
 
-export default UserSignupPage;
+export default withTranslation()(UserSignupPage);
