@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import './bootstrap-override.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import UserSignupPage from "./pages/UserSignupPage";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <UserSignupPage />
   </React.StrictMode>,
   document.getElementById('root')
 );
