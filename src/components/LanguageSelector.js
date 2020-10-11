@@ -11,7 +11,7 @@ const LanguageSelector = (props) => {
     }
 
     return (
-        <div>
+        <div className="container">
             <img
                 src="https://www.countryflags.io/tr/flat/24.png"
                 alt="Turkish"

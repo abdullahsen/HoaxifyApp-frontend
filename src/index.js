@@ -5,11 +5,13 @@ import './bootstrap-override.scss';
 import './i18n';
 import * as serviceWorker from './serviceWorker';
 import UserSignupPage from "./pages/UserSignupPage";
-import UserLoginPage from "./pages/UserLoginPage";
+import LanguageSelector from './components/LanguageSelector';
+import UserLoginPage from "./pages/LoginPage";
 
 ReactDOM.render(
   <React.StrictMode>
-    <UserLoginPage />
+    <UserSignupPage />
+    <LanguageSelector/>
   </React.StrictMode>,
   document.getElementById('root')
 );
