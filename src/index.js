@@ -4,14 +4,12 @@ import './index.css';
 import './bootstrap-override.scss';
 import './i18n';
 import * as serviceWorker from './serviceWorker';
-import UserSignupPage from "./pages/UserSignupPage";
-import LanguageSelector from './components/LanguageSelector';
-import UserLoginPage from "./pages/LoginPage";
+import App from "./container/App";
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <UserSignupPage />
-    <LanguageSelector/>
+    <App/>
   </React.StrictMode>,
   document.getElementById('root')
 );

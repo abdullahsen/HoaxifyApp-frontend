@@ -3,7 +3,7 @@ import {withTranslation} from 'react-i18next';
 import { login } from '../api/apiCalls';
 import Input from '../components/Input';
 import ButtonWithProgress from '../components/ButtonWithProgress';
-import axios from 'axios'
+import {withApiProgress} from "../shared/ApiProgress";
 
 
 class LoginPage extends React.Component {
@@ -13,27 +13,10 @@ class LoginPage extends React.Component {
         this.state = {
             username: null,
             password: null,
-            pendingApiCall: false,
             error: null
         }
     }
 
-    componentDidMount() {
-        axios.interceptors.request.use( (request) => {
-            this.setState({
-                pendingApiCall: true
-            });
-            return request;
-        });
-
-        axios.interceptors.response.use((response)=> {
-            this.setState({pendingApiCall: false});
-            return response;
-        }, (error)=> {
-            this.setState({pendingApiCall: false});
-            throw error;
-        })
-    }
 
     onChange = (event) => {
         const { name, value } = event.target;
@@ -47,23 +30,24 @@ class LoginPage extends React.Component {
         event.preventDefault();
         const {username, password} = this.state;
         const creds = {username, password};
+        const { push } = this.props.history;
         this.setState({error:null});
-        this.setState({pendingApiCall:true});
 
         try {
-            const response = await login(creds);
+            await login(creds);
+            push('/');
         }catch (e) {
+
             this.setState({
                 error: e.response.data.message
             })
         }
-        this.setState({pendingApiCall:false});
     }
 
     render() {
-        const { username, password, error, pendingApiCall} = this.state;
+        const { username, password, error} = this.state;
         const buttonEnabled = username && password;
-        const {t} = this.props;
+        const {t, pendingApiCall} = this.props;
 
         return (
             <div className="container">
@@ -97,4 +81,7 @@ class LoginPage extends React.Component {
     }
 }
 
-export default withTranslation()(LoginPage);
+const LoginPageWithTranslation = withTranslation()(LoginPage);
+
+
+export default withApiProgress(LoginPageWithTranslation, '/api/1.0/auth');
