@@ -1,31 +1,43 @@
-import {createStore} from "redux";
+import {createStore, applyMiddleware, compose} from "redux";
+import thunk from 'redux-thunk';
 import authReducer from "./authReducer";
+import SecureLS from "secure-ls";
 
+const secureLS = new SecureLS();
 
-const configureStore = () => {
+const getStateFromStorage = () => {
 
-    const HOAX_AUTH = 'hoax-auth';
-
-    const hoaxAuth = localStorage.getItem(HOAX_AUTH);
+    const hoaxAuth = secureLS.get('hoax-auth');
 
     let stateInLocalStorage = {
         isLoggedIn: false,
         username: undefined,
         displayName: undefined,
         image: undefined,
-        password: undefined
+        password: undefined,
     };
 
     if (hoaxAuth) {
-        try {
-            stateInLocalStorage = JSON.parse(hoaxAuth);
-        } catch (error) {}
+        return hoaxAuth;
     }
 
-    const store = createStore(authReducer, stateInLocalStorage, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+    return stateInLocalStorage;
+}
+
+
+const updateInLocalStorage = (newState) => {
+    secureLS.set('hoax-auth', newState);
+}
+
+const configureStore = () => {
+    const initialState = getStateFromStorage();
+
+    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+    const store = createStore(authReducer, initialState, composeEnhancers(applyMiddleware(thunk)) );
 
     store.subscribe(() => {
-        localStorage.setItem(HOAX_AUTH, JSON.stringify(store.getState()));
+        updateInLocalStorage(store.getState())
     });
 
     return store;

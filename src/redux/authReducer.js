@@ -8,18 +8,15 @@ const defaultState = {
     password: undefined
 }
 
-const authReducer = (state
+const authReducer = (state = {...defaultState}
                     ,action) => {
     switch (action.type){
-        case ACTIONS.LOGOUT_SUCCESS : {
+        case ACTIONS.LOGOUT_SUCCESS :
             return defaultState;
-        }
-        case ACTIONS.LOGIN_SUCCESS : {
+        case ACTIONS.LOGIN_SUCCESS :
             return {isLoggedIn:true, ...action.payload}
-        }
-        default: {
-            return defaultState;
-        }
+        default:
+            return state;
     }
 
 }
