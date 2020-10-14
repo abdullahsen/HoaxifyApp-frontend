@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider} from "react-redux";
 import configureStore from "./redux/configureStore";
+import AuthenticationContext from './shared/AuthenticationContext';
 import './index.css';
 import './bootstrap-override.scss';
 import './i18n';
@@ -15,7 +16,9 @@ const store = configureStore();
 
 ReactDOM.render(
     <Provider store={store}>
+        <AuthenticationContext>
           <App/>
+        </AuthenticationContext>
     </Provider>,
   document.getElementById('root')
 );
