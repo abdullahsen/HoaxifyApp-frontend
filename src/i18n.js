@@ -12,7 +12,12 @@ i18n.use(initReactI18next).init({
                 Password: 'Password',
                 'Password Repeat': 'Password Repeat',
                 Login: 'Login',
-                Logout: 'Logout'
+                Logout: 'Logout',
+                Users: 'Users',
+                Next: 'Next >',
+                Previous: '< Previous',
+                'Loading...': 'Loading...',
+                'Load Failure': 'Load Failure'
             }
         },
         tr: {
@@ -24,7 +29,12 @@ i18n.use(initReactI18next).init({
                 Password: 'Parola',
                 'Password Repeat': 'Parolayi Tekrarla',
                 Login: 'Giris',
-                Logout: 'Cikis Yap'
+                Logout: 'Cikis Yap',
+                Users: 'Kullanicilar',
+                Next: 'Sonraki >',
+                Previous: '< Onceki',
+                'Loading...': 'Yukleniyor...',
+                'Load Failure': 'Yukleme Hatasi'
             }
         }
     },
