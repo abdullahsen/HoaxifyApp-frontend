@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import Input from "../components/Input";
+import Input from '../components/Input';
 import ButtonWithProgress from '../components/ButtonWithProgress';
-import { useApiProgress } from "../shared/ApiProgress";
-import {signupHandler} from "../redux/authActions";
+import { useApiProgress } from '../shared/ApiProgress';
+import {signupHandler} from '../redux/authActions';
 
 const UserSignupPage = (props) => {
 
@@ -22,7 +22,7 @@ const UserSignupPage = (props) => {
     //Inputlarda degisiklik oldugu zaman
     const onChange = (event) => {
         const {name, value} = event.target;
-        setErrors((previousErros) => ({...previousErros, [name]: undefined}));
+        setErrors((previousErrors) => ({...previousErrors, [name]: undefined}));
         setForm((previousForm) => ({...previousForm, [name]: value}));
     }
 
@@ -49,8 +49,8 @@ const UserSignupPage = (props) => {
         }
     }
 
-    const pendingApiCallForSignup = useApiProgress('/api/1.0/users');
-    const pendingApiCallForLogin = useApiProgress('/api/1.0/auth');
+    const pendingApiCallForSignup = useApiProgress('post','/api/1.0/users');
+    const pendingApiCallForLogin = useApiProgress('post','/api/1.0/auth');
     const pendingApiCall = pendingApiCallForLogin || pendingApiCallForSignup
 
 

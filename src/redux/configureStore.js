@@ -1,6 +1,6 @@
-import {createStore, applyMiddleware, compose} from "redux";
+import {createStore, applyMiddleware, compose} from 'redux';
 import thunk from 'redux-thunk';
-import authReducer from "./authReducer";
+import authReducer from './authReducer';
 import SecureLS from "secure-ls";
 import {setAuthorizationHeader} from '../api/apiCalls';
 
