@@ -1,5 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import React from "react";
 
 i18n.use(initReactI18next).init({
     resources: {
@@ -22,7 +23,10 @@ i18n.use(initReactI18next).init({
                 Edit: 'Edit',
                 'Change Display Name': 'Change Display Name',
                 Save: 'Save',
-                Cancel: 'Cancel'
+                Cancel: 'Cancel',
+                'My Profile':'My Profile',
+                'There is not hoax':'There is not hoax',
+                'Load old hoaxes': 'Load old hoaxes'
             }
         },
         tr: {
@@ -44,7 +48,10 @@ i18n.use(initReactI18next).init({
                 Edit: 'Duzenle',
                 'Change Display Name': 'Gorunen Adi Degistir',
                 Save: 'Kaydet',
-                Cancel: 'Iptal'
+                Cancel: 'Iptal',
+                'My Profile': 'Hesabim',
+                'There is not hoax':'Hoax bulunamadi',
+                'Load old hoaxes': 'Eski hoaxlari yukle'
 
             }
         }

@@ -7,7 +7,7 @@ const UserListItem = (props) => {
 
     return (
         <Link to={`/user/${username}`} className="list-group-item list-group-item-action">
-            <ProfileImageWithDefault heigth={32} width={32} user={{username, image, displayName}}/>
+            <ProfileImageWithDefault heigth={32} width={32} className="rounded-circle shadow" user={{username, image, displayName}}/>
             <span className="pl-2">
             {`${displayName} @${username}`}
             </span>

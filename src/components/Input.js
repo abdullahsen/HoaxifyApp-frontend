@@ -3,7 +3,13 @@ import { useTranslation } from 'react-i18next'
 
 const Input = (props) => {
     const {label, error, name, onChange, type, defaultValue} = props;
-    const className = error ? "form-control is-invalid" : "form-control";
+    let className = 'form-control';
+    if(type==='file'){
+        className+='-file';
+    }
+    if(error!==undefined){
+        className+=' is-invalid';
+    }
     const { t } = useTranslation();
     return (
         <div className="form-group">

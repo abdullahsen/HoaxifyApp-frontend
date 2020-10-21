@@ -14,6 +14,15 @@ export const loginSuccess = (authState) => {
     };
 };
 
+export const updateSuccess = ({displayname, image}) => {
+    return {
+        type: ACTIONS.UPDATE_SUCCESS,
+        payload: {
+            displayname, image
+        }
+    }
+}
+
 export const loginHandler = (credentials) => {
     return async function (dispatch){
         const response = await login(credentials);
