@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {Link, useParams} from 'react-router-dom'
+import {useParams, useHistory} from 'react-router-dom'
 import {useSelector, useDispatch} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import ProfileImageWithDefault from "./ProfileImageWithDefault";
 import Input from "./Input";
-import {updateUser} from '../api/apiCalls';
+import {updateUser, deleteUser} from '../api/apiCalls';
 import {useApiProgress} from "../shared/ApiProgress";
 import ButtonWithProgress from "./ButtonWithProgress";
-import { updateSuccess } from '../redux/authActions'
+import {logoutSuccess, updateSuccess} from '../redux/authActions'
+import Modal from "./Modal";
 
 
 const ProfileCard = (props) => {
@@ -18,11 +19,13 @@ const ProfileCard = (props) => {
     const [updatedDisplayName, setUpdatedDisplayName] = useState();
     const [editable, setEditable] = useState(false);
     const [newImage, setNewImage] = useState();
+    const [modalVisible, setModalVisible] = useState(false);
     const [validationErrors, setValidationErrors] = useState({});
     const routeParams = useParams();
     const {t} = useTranslation();
     const pathUsername = routeParams.username;
     const dispatch = useDispatch();
+    const history = useHistory();
 
 
     useEffect(() => {
@@ -37,6 +40,7 @@ const ProfileCard = (props) => {
     const {username, displayName, image} = user;
 
     const pendingApiCall = useApiProgress('put', '/api/1.0/users/' + username);
+    const pendingApiCallForDeleteUser = useApiProgress('delete',`/api/1.0/users/${username}`,true);
 
     useEffect(() => {
         if (!inEditMode) {
@@ -48,16 +52,18 @@ const ProfileCard = (props) => {
 
     }, [inEditMode, displayName]);
 
-    useEffect(()=>{
-        setValidationErrors((previousValidationErrors) => ({...previousValidationErrors, displayName:undefined}))
-    },[updatedDisplayName]);
+    useEffect(() => {
+        setValidationErrors((previousValidationErrors) => (
+            {...previousValidationErrors, displayName: undefined}))
+    }, [updatedDisplayName]);
 
-    useEffect(()=> {
-        setValidationErrors((previousValidationErrors) => ({...previousValidationErrors, image:undefined}))
-    },[newImage])
+    useEffect(() => {
+        setValidationErrors((previousValidationErrors) => (
+            {...previousValidationErrors, image: undefined}))
+    }, [newImage])
 
     const onChangeFile = (event) => {
-        if(event.target.files.length < 1){
+        if (event.target.files.length < 1) {
             return;
         }
         const file = event.target.files[0];
@@ -72,12 +78,12 @@ const ProfileCard = (props) => {
         event.preventDefault();
 
         let image;
-        if(newImage){
+        if (newImage) {
             image = newImage.split(',')[1];
         }
 
         try {
-            const body = {displayName: updatedDisplayName, image };
+            const body = {displayName: updatedDisplayName, image};
             const response = await updateUser(username, body);
             setUser(response.data);
             setInEditMode(false);
@@ -87,7 +93,19 @@ const ProfileCard = (props) => {
         }
     }
 
-    const { displayName: displayNameError, image:imageError} = validationErrors;
+
+    const onClickCancel = ( ) => {
+        setModalVisible(false);
+    }
+
+    const onClickDelete =  async () => {
+        await deleteUser(username);
+        setModalVisible(false);
+        dispatch(logoutSuccess());
+        history.push("/")
+    }
+
+    const {displayName: displayNameError, image: imageError} = validationErrors;
 
     return (
         <div className="card text-center">
@@ -95,7 +113,7 @@ const ProfileCard = (props) => {
                 <ProfileImageWithDefault
                     className="rounded-circle shadow"
                     image={image}
-                    tempImage={newImage}
+                    tempimage={newImage}
                     alt={`${username} profile`}
                     heigth={196}
                     width={196}/>
@@ -105,11 +123,24 @@ const ProfileCard = (props) => {
                     <>
                         <h3>{`${displayName} @${username}`}</h3>
                         {editable &&
-                        <button className="btn btn-success d-inline-flex" onClick={() => setInEditMode(true)}>
-                            <span className="material-icons">
-                                create
-                            </span>{t('Edit')}
-                        </button>}
+                        (<>
+                                <div>
+                                    <button className="btn btn-success d-inline-flex"
+                                            onClick={() => setInEditMode(true)}>
+                                        <span className="material-icons">
+                                            create
+                                        </span>{t('Edit')}
+                                    </button>
+                                </div>
+                                <div>
+                                    <button
+                                        onClick={()=>setModalVisible(true)}
+                                        className="btn btn-danger m-2">
+                                        <span className="material-icons">person_remove</span>{t('Delete My Account')}
+                                    </button>
+                                </div>
+                            </>
+                        )}
                     </>
                 )}
                 {
@@ -150,6 +181,20 @@ const ProfileCard = (props) => {
                     )
                 }
             </div>
+            <Modal
+                okButton={t('Delete User')}
+                onClickCancel={onClickCancel}
+                onClickOk={onClickDelete}
+                pendingApiCall={pendingApiCallForDeleteUser}
+                title={t('Delete User')}
+                message={<div>
+                    <div>
+                        <strong>{t('Are you sure to delete your profile?')}</strong>
+                    </div>
+                    <span>{username}</span>
+                </div>
+                }
+                visible={modalVisible}/>
         </div>
     );
 };

@@ -1,6 +1,7 @@
+import React from "react";
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import React from "react";
+import { register } from 'timeago.js'
 
 i18n.use(initReactI18next).init({
     resources: {
@@ -26,7 +27,13 @@ i18n.use(initReactI18next).init({
                 Cancel: 'Cancel',
                 'My Profile':'My Profile',
                 'There is not hoax':'There is not hoax',
-                'Load old hoaxes': 'Load old hoaxes'
+                'Load old hoaxes': 'Load old hoaxes',
+                'There are new hoaxes': 'There are new hoaxes',
+                'Delete Hoax': `Delete Hoax`,
+                'Are you sure to delete hoax?': 'Are you sure to delete hoax?',
+                'Delete My Account':'Delete My Account',
+                'Delete User': 'Delete User',
+                'Are you sure to delete your profile?':'Are you sure to delete your profile?'
             }
         },
         tr: {
@@ -51,7 +58,13 @@ i18n.use(initReactI18next).init({
                 Cancel: 'Iptal',
                 'My Profile': 'Hesabim',
                 'There is not hoax':'Hoax bulunamadi',
-                'Load old hoaxes': 'Eski hoaxlari yukle'
+                'Load old hoaxes': 'Eski hoaxlari yukle',
+                'There are new hoaxes': 'Yeni hoaxlari yukle',
+                'Delete Hoax': `Hoax'u Sil`,
+                'Are you sure to delete hoax?': `Hoax'u silmek istediginizden emin misiniz?`,
+                'Delete My Account':'Hesabimi Sil',
+                'Delete User': 'Kullaniciyi Sil',
+                'Are you sure to delete your profile?':'Profilinizi silmek istediginizden emin misiniz?'
 
             }
         }
@@ -68,5 +81,26 @@ i18n.use(initReactI18next).init({
         wait: true
     }
 });
+
+const timeAgoTR  = function(number, index) {
+    return [
+        ['az önce', 'şimdi'],
+        ['%s saniye önce', '%s saniye içinde'],
+        ['1 dakika önce', '1 dakika içinde'],
+        ['%s dakika önce', '%s dakika içinde'],
+        ['1 saat önce', '1 saat içinde'],
+        ['%s saat önce', '%s saat içinde'],
+        ['1 gün önce', '1 gün içinde'],
+        ['%s gün önce', '%s gün içinde'],
+        ['1 hafta önce', '1 hafta içinde'],
+        ['%s hafta önce', '%s hafta içinde'],
+        ['1 ay önce', '1 ay içinde'],
+        ['%s ay önce', '%s ay içinde'],
+        ['1 yıl önce', '1 yıl içinde'],
+        ['%s yıl önce', '%s yıl içinde'],
+    ][index];
+}
+
+register('tr',timeAgoTR);
 
 export default i18n;
